@@ -1,5 +1,5 @@
 import numpy as np
-
+import datetime
 
 class Game() :
     def __init__(self) :
@@ -26,6 +26,8 @@ class Player :
         self.list = []
         self.gameboard = gameboard
         self.king = None
+        self.time = datetime.timedelta(minutes=15)
+        self.delta = None
 
     def __repr__(self) :
         return self.color
@@ -190,12 +192,14 @@ def initiate_session() :
         players[-1].king = king
         players[-1].list.append(Piece(colors[i], (i * (-7) + 7, 4 - i), "Q", game.board, players[-1]))
     players[0].legal_lister(players[1])
+    players[0].delta = datetime.datetime.now()
     return players
 
 
 def chess(players, form) :
-    while (len(players[0].legal_moves) > 0) | (len(players[1].legal_moves) > 0) :
-        [move for move in players[0].legal_moves if form.input.data == str(move)][0].piece.move_piece(form.input.data,players[1])
-        players[1].legal_lister(players[0])
-        players = [players[1], players[0]]
-        return players
+    players[0].time -= (datetime.datetime.now() - players[0].delta)
+    [move for move in players[0].legal_moves if form.input.data == str(move)][0].piece.move_piece(form.input.data,players[1])
+    players[1].legal_lister(players[0])
+    players[1].delta = datetime.datetime.now()
+    players = [players[1], players[0]]
+    return players
