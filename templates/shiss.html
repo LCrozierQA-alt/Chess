@@ -3,20 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Shiss</title>
+
 </head>
 <body>
+<script src='{{ url_for("static", filename="js/drag_and_deliver.js") }}'></script>
  {% for player in players %}
  {% if player.color == 'black' %}
  <p>{{player.time}}</p>
  {% for item in player.vict_list %}
-    <img src = "static/{{item.color}}/{{item.type}}.png" alt= "_" width="25" height="25">
+    <img src = "/static/{{item.color}}/{{item.type}}.png" alt= "_" width="25" height="25">
  {% endfor %}
  {% endif %}
  {% endfor %}
     {% for p in rng %}
     <p>
         {% for q in rng %}
-            <img src = "static/{{players[0].gameboard[p][q].color}}/{{players[0].gameboard[p][q].type}}.png" alt= "_" width="75" height="75" id = "{{p}}{{q}}">
+            <img src="/static/{{players[0].gameboard[p][q].color}}/{{players[0].gameboard[p][q].type}}.png" class="chessblock" ondragstart="drag(event)" draggable ="true" alt="_" width="75" height="75" id = "{{players[0].gameboard[p][q].id}}{{p}}{{q}}">
         {% endfor %}
     </p>
     {% endfor %}
@@ -24,13 +26,13 @@
  {% if player.color == 'white' %}
  <p>{{player.time}}</p>
  {% for item in player.vict_list %}
-    <img src = "static/{{item.color}}/{{item.type}}.png" alt= "_" width="25" height="25">
+    <img src = "/static/{{item.color}}/{{item.type}}.png" alt= "_" width="25" height="25">
  {% endfor %}
  {% endif %}
  {% endfor %}
 <form method="POST">
     <h3>Make Move</h3>
-        <h5>{% for move in players[0].legal_moves %}
+        <h5 id="legalist">{% for move in players[0].legal_moves %}
             {{move}},
         {% endfor %}</h5>
     {{nput.hidden_tag()}}

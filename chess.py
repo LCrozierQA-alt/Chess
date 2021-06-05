@@ -13,21 +13,23 @@ class Square() :
     def __init__(self) :
         self.color = "square"
         self.type = "square"
+        self.id = "00"
 
     def __repr__(self) :
         return "_"
 
 
 class Player :
-    def __init__(self, color, gameboard) :
+    def __init__(self, color, gameboard, mins, secs) :
         self.legal_moves = []
         self.vict_list = []
         self.color = color
         self.list = []
         self.gameboard = gameboard
         self.king = None
-        self.time = datetime.timedelta(minutes=15)
+        self.time = datetime.timedelta(minutes=mins, seconds=secs)
         self.delta = None
+
 
     def __repr__(self) :
         return self.color
@@ -53,6 +55,7 @@ class Player :
 
 
 class Piece() :
+    id_counter = 10
     def __init__(self, color, position, type, game_board, player) :
         self.color = color
         self.position = position
@@ -61,15 +64,14 @@ class Piece() :
         self.board[self.position[0], self.position[1]] = self
         self.player = player
         self.move = False
+        self.id = Piece.id_counter
+        Piece.id_counter += 1
 
     def __repr__(self) :
         return self.type
 
-    def translate_chess_to_numpy(self, input) :
-        return 8 - int(input[-1]), {"a" : 0, "b" : 1, "c" : 2, "d" : 3, "e" : 4, "f" : 5, "g" : 6, "h" : 7}[input[-2]]
-
     def move_piece(self, nput, other) :
-        position = self.translate_chess_to_numpy(nput)
+        position = (int(nput[-2]), int(nput[-1]))
         if type(self.board[position[0]][position[1]]) != type(Square()) :
             self.player.vict_list.append(self.board[position[0]][position[1]])
             other.list = [item for item in other.list if item.position != position]
@@ -168,19 +170,15 @@ class Move() :
             8 - position[0])
 
     def __repr__(self) :
-        movrep = ""
-        if self.piece.type != "o" :
-            movrep += self.piece.type
-        movrep += self.translate_numpy_to_chess(self.position)
-        return movrep
+        return str(self.piece.id) + str(self.position[0]) + str(self.position[1])
 
 
-def initiate_session() :
+def initiate_session(mins, secs) :
     colors = ["white", "black"]
     game = Game()
     players = []
     for i in range(2) :
-        players.append(Player(colors[i], game.board))
+        players.append(Player(colors[i], game.board, mins, secs))
         for num in range(0, 8) :
             players[-1].list.append(Piece(colors[i], (i * (-5) + 6, num), "o", game.board, players[-1]))
         for num in range(1, 3) :
