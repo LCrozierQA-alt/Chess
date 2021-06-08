@@ -1,27 +1,42 @@
-
-window.onload = function(){
-    const chessblock = document.querySelectorAll('.chessblock');
-    for (var square of chessblock){
-        square.addEventListener('dragstart', drag);
-        }
-    }
+$(document).ready(() => {
+    var legalist = $('#legalist').text().split(',\n    \n        ');
 
 
-function drag(ev){
-    ev.dataTransfer.setData("text/plain", ev.target.id);
-    var legalist = document.getElementById("legalist").innerHTML.split(",");
-    for (var square of chessblock){
-        if (legalist.includes(ev.dataTransfer.getData("text/plain").substring(0,2) + square.id.substring(2))){
-            square.style.backgroundColor="#008000"
-            }
-        }
-}
-
-
-function drop(ev){
+    $('.chessblock').on('mousedown', () => {
+        var piece_id = event.target.id;
+        $('.chessblock').each(function() {
+            if (legalist.includes(piece_id.substring(0,2) + $(this).attr("id").substring(2))){
+                $(this).css("backgroundColor","#008000")
+                $(this).droppable({
+                    drop: function(event, ui){
+                        var data = piece_id.substring(0,2) + event.target.id.substring(2);
+                        console.log(data)
+                        $.ajax({
+                            url: '/shiss',
+                            type: 'POST',
+                            data: data,
+                            success: function(response){
+                                location.reload();
+                                console.log(response);
+                            },
+                            error: function(error){
+                                console.log(error);
+                            }   
+                        })
     
-    var data = ev.dataTransfer.getData("text");
-}
-function allowDrop(ev) {
-    ev.preventDefault();
-  }
+                    }
+                })
+                }
+        })
+    })
+    $(document).on('mouseup', () => {
+        $('.chessblock').each(function() {
+            $(this).css("backgroundColor","#ffffff")
+        })
+})
+    
+    $('.chessblock').draggable({
+        revert: true
+    })
+            
+});

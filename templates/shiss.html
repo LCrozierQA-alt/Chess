@@ -6,7 +6,6 @@
 
 </head>
 <body>
-<script src='{{ url_for("static", filename="js/drag_and_deliver.js") }}'></script>
  {% for player in players %}
  {% if player.color == 'black' %}
  <p>{{player.time}}</p>
@@ -18,7 +17,7 @@
     {% for p in rng %}
     <p>
         {% for q in rng %}
-            <img src="/static/{{players[0].gameboard[p][q].color}}/{{players[0].gameboard[p][q].type}}.png" class="chessblock" ondragstart="drag(event)" draggable ="true" alt="_" width="75" height="75" id = "{{players[0].gameboard[p][q].id}}{{p}}{{q}}">
+            <img src="/static/{{players[0].gameboard[p][q].color}}/{{players[0].gameboard[p][q].type}}.png" class="chessblock" draggable ="true" alt="_" width="75" height="75" id = "{{players[0].gameboard[p][q].id}}{{p}}{{q}}">
         {% endfor %}
     </p>
     {% endfor %}
@@ -32,12 +31,15 @@
  {% endfor %}
 <form method="POST">
     <h3>Make Move</h3>
-        <h5 id="legalist">{% for move in players[0].legal_moves %}
-            {{move}},
-        {% endfor %}</h5>
+    <h5 id="legalist">{% for move in players[0].legal_moves %}
+        {{move.repr}},
+    {% endfor %}</h5>
     {{nput.hidden_tag()}}
     <p>{{nput.input}}</p>
     <p>{{nput.sub}}</p>
-
+        </form>
+<script type=text/javascript src="{{url_for('static', filename='js/jquery.js') }}"></script>
+<script type=text/javascript src="{{url_for('static', filename='js/jquery-ui.js') }}"></script>
+<script src='{{ url_for("static", filename="js/drag_and_deliver.js") }}'></script>
 </body>
 </html>

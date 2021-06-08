@@ -1,0 +1,4 @@
+Dynamic with Jinja2 & JQuery:
+
+User sends an AJAX which bumps a py, a template for the chessboard is modified and live presented onto the main through Jinka
+-NO USE of SQL

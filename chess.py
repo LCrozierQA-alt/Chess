@@ -164,6 +164,7 @@ class Move() :
     def __init__(self, piece, position) :
         self.piece = piece
         self.position = position
+        self.repr = str(self.piece.id) + str(self.position[0]) + str(self.position[1])
 
     def translate_numpy_to_chess(self, position) :
         return {0 : "a", 1 : "b", 2 : "c", 3 : "d", 4 : "e", 5 : "f", 6 : "g", 7 : "h"}[position[1]] + str(
@@ -173,12 +174,12 @@ class Move() :
         return str(self.piece.id) + str(self.position[0]) + str(self.position[1])
 
 
-def initiate_session(mins, secs) :
+def initiate_session() :
     colors = ["white", "black"]
     game = Game()
     players = []
     for i in range(2) :
-        players.append(Player(colors[i], game.board, mins, secs))
+        players.append(Player(colors[i], game.board, 15, 0))
         for num in range(0, 8) :
             players[-1].list.append(Piece(colors[i], (i * (-5) + 6, num), "o", game.board, players[-1]))
         for num in range(1, 3) :
@@ -195,8 +196,9 @@ def initiate_session(mins, secs) :
 
 
 def chess(players, form) :
+    print(form)
     players[0].time -= (datetime.datetime.now() - players[0].delta)
-    [move for move in players[0].legal_moves if form.input.data == str(move)][0].piece.move_piece(form.input.data,players[1])
+    [move for move in players[0].legal_moves if form == str(move)][0].piece.move_piece(form,players[1])
     players[1].legal_lister(players[0])
     players[1].delta = datetime.datetime.now()
     players = [players[1], players[0]]

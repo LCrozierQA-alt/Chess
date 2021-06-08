@@ -1,10 +1,11 @@
 from flask import Flask, render_template, redirect, url_for
+from flask.globals import request
 from flask_wtf import FlaskForm
 from wtforms import SelectField, SubmitField, IntegerField
 from chess import chess, initiate_session
 from wtforms.validators import InputRequired
 import datetime
-
+checklist = []
 
 class Input(FlaskForm) :
     input = SelectField('Moves', choices=[])
@@ -26,19 +27,23 @@ app.config["SECRET_KEY"] = "plz don't hack me"
 def index() :
     time = Time()
     if time.validate_on_submit() :
-        return redirect(url_for("shiss", mins=time.mins.data, secs=time.secs.data, _external=True, _scheme='http'))
+        return redirect(url_for("shiss", _external=True, _scheme='http'))
     return render_template("index.html", time=time)
 
 
-@app.route('/shiss/<int:mins>/<int:secs>', methods=["GET", "POST"])
-def shiss(mins, secs) :
+@app.route('/shiss', methods=["GET", "POST"])
+def shiss() :
     form = Input()
-    if form.input.data is None :
-        global players_log
-        players_log = initiate_session(mins, secs)
-    else :
-        x = chess(players_log, form)
-        players_log = x
+    global players_log
+    print(request.form)
+    if len(checklist)>0 :
+        if request.method == "POST":
+            data = list(request.form.to_dict(flat=False).keys())[0]
+            x = chess(players_log, data)
+            players_log = x
+    else:
+        players_log = initiate_session()
+        checklist.append('val')
     if (len(players_log[0].legal_moves) > 0) | (players_log[0].time > datetime.timedelta(seconds=0)) :
         form.input.choices = players_log[0].legal_moves
         return render_template('shiss.html', players=players_log, nput=form, rng=range(8))
