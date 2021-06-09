@@ -3,43 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>Shiss</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', filename='styles/shiss.css') }}">
 
 </head>
 <body>
+    <div class = 'page_topper'></div>
  {% for player in players %}
- {% if player.color == 'black' %}
- <p>{{player.time}}</p>
- {% for item in player.vict_list %}
-    <img src = "/static/{{item.color}}/{{item.type}}.png" alt= "_" width="25" height="25">
+    {% if player.color == 'black' %}
+    <p>{{player.time}}</p>
+        {% for item in player.vict_list %}
+            <img src = "/static/{{item.color}}/{{item.type}}.png" alt= "_" width="25" height="25">
+        {% endfor %}
+    {% endif %}
  {% endfor %}
- {% endif %}
- {% endfor %}
-    {% for p in rng %}
-    <p>
+    <div class='board'>{% for p in rng %}
+    <p class ='chessrow'>
         {% for q in rng %}
-            <img src="/static/{{players[0].gameboard[p][q].color}}/{{players[0].gameboard[p][q].type}}.png" class="chessblock" draggable ="true" alt="_" width="75" height="75" id = "{{players[0].gameboard[p][q].id}}{{p}}{{q}}">
+            <img src="/static/{{players[0].gameboard[p][q].color}}/{{players[0].gameboard[p][q].type}}.png" class="chessblock" draggable ="true" alt="_" id = "{{players[0].gameboard[p][q].id}}{{p}}{{q}}">
         {% endfor %}
     </p>
-    {% endfor %}
+    {% endfor %}></div>
  {% for player in players %}
- {% if player.color == 'white' %}
- <p>{{player.time}}</p>
- {% for item in player.vict_list %}
-    <img src = "/static/{{item.color}}/{{item.type}}.png" alt= "_" width="25" height="25">
+    {% if player.color == 'white' %}
+        <p>{{player.time}}</p>
+        {% for item in player.vict_list %}
+            <img src = "/static/{{item.color}}/{{item.type}}.png" alt= "_" width="25" height="25">
+        {% endfor %}
+    {% endif %}
  {% endfor %}
- {% endif %}
- {% endfor %}
-<form method="POST">
-    <h3>Make Move</h3>
+<div hidden>
     <h5 id="legalist">{% for move in players[0].legal_moves %}
         {{move.repr}},
     {% endfor %}</h5>
-    {{nput.hidden_tag()}}
-    <p>{{nput.input}}</p>
-    <p>{{nput.sub}}</p>
-        </form>
+</div>
+<div class = 'page_topper'></div>
 <script type=text/javascript src="{{url_for('static', filename='js/jquery.js') }}"></script>
 <script type=text/javascript src="{{url_for('static', filename='js/jquery-ui.js') }}"></script>
 <script src='{{ url_for("static", filename="js/drag_and_deliver.js") }}'></script>
 </body>
+<footer></footer>
 </html>

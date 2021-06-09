@@ -1,6 +1,6 @@
 $(document).ready(() => {
-    var legalist = $('#legalist').text().split(',\n    \n        ');
-
+    var legalist = $('#legalist').text().trimLeft("").split(',\n    \n        ');
+    legalist[legalist.length - 1] = legalist[legalist.length - 1].substring(0,4);
 
     $('.chessblock').on('mousedown', () => {
         var piece_id = event.target.id;
@@ -8,9 +8,9 @@ $(document).ready(() => {
             if (legalist.includes(piece_id.substring(0,2) + $(this).attr("id").substring(2))){
                 $(this).css("backgroundColor","#008000")
                 $(this).droppable({
+                    disabled: false,
                     drop: function(event, ui){
                         var data = piece_id.substring(0,2) + event.target.id.substring(2);
-                        console.log(data)
                         $.ajax({
                             url: '/shiss',
                             type: 'POST',
@@ -21,12 +21,16 @@ $(document).ready(() => {
                             },
                             error: function(error){
                                 console.log(error);
-                            }   
+                            }
                         })
-    
                     }
                 })
-                }
+            }
+            else{
+                $(this).droppable({
+                    disabled: true
+                  });
+            }
         })
     })
     $(document).on('mouseup', () => {

@@ -1,0 +1,20 @@
+.page_topper {
+    background-color:black;
+    height: 120px;
+}
+.board {
+    margin: auto;
+    width: 60%;
+}
+
+.chessblock{
+    width: 75px;
+    height: 75px;
+}
+.chessrow{
+    padding: 0;
+    margin: 0;
+}
+body {
+    margin: 0;
+}
