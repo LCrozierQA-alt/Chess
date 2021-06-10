@@ -1,2 +1,2 @@
 # DumbFlask
- A better Ches game
+Chess game
