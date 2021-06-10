@@ -4,6 +4,7 @@ from chess import chesspy, initiate_session
 import datetime
 players_log=[]
 
+
 app = Flask(__name__, static_url_path='/static')
 app.config["SECRET_KEY"] = "plz don't hack me"
 
@@ -26,31 +27,13 @@ def shiss2() :
             x = chesspy(players_log, data)
             players_log = x
     else:
-        print('Hello')
         players_log = initiate_session()
     if (len(players_log[0].legal_moves) > 0) | (players_log[0].time > datetime.timedelta(seconds=0)) :
         return render_template('shiss2.html', players=players_log, rng=range(8))
     else :
         return render_template('game_over.html')   
 
-@app.route('/shiss', methods=["GET", "POST"])
-def shiss() :
-    global players_log
-    if len(players_log)>0 :
-        if request.method == "POST":
-            data = list(request.form.to_dict(flat=False).keys())[0]
-            x = chesspy(players_log, data)
-            players_log = x
-    else:
-        players_log = initiate_session()
-    if (len(players_log[0].legal_moves) > 0) | (players_log[0].time > datetime.timedelta(seconds=0)) :
-        return render_template('shiss.html', players=players_log, rng=range(8))
-    else :
-        return render_template('game_over.html')
 
-@app.route('/drag_and_dorp')
-def drag_and_dorp():
-    return render_template('drag_and_dorp.html')
 
 
 if __name__ == '__main__' :
