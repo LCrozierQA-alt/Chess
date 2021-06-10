@@ -1,0 +1,75 @@
+{% for player in players %}
+    {% if player.color == 'black' %}
+    <p>   {{player.time}}</p>
+        {% for item in player.vict_list %}
+            <img src = "/static/{{item.color}}/{{item.type}}.png" alt= "_" width="25" height="25">
+        {% endfor %}
+    {% endif %}
+ {% endfor %}
+    <div class='board'>{% for p in rng %}
+    <p class ='chessrow'>
+        {% for q in rng %}
+            <img src="/static/{{players[0].gameboard[p][q].color}}/{{players[0].gameboard[p][q].type}}.png" class="chessblock" draggable ="true" alt="_" id = "{{players[0].gameboard[p][q].id}}{{p}}{{q}}">
+        {% endfor %}
+    </p>
+    {% endfor %}></div>
+ {% for player in players %}
+    {% if player.color == 'white' %}
+        <p>   {{player.time}}</p>
+        {% for item in player.vict_list %}
+            <img src = "/static/{{item.color}}/{{item.type}}.png" alt= "_" width="25" height="25">
+        {% endfor %}
+    {% endif %}
+ {% endfor %}
+<div hidden>
+    <h5 id="legalist">{% for move in players[0].legal_moves %}
+        {{move.repr}},
+    {% endfor %}</h5>
+</div>
+<script>
+    $(document).ready(() => {
+        var legalist = $('#legalist').text().trimLeft("").split(',\n    \n        ');
+        legalist[legalist.length - 1] = legalist[legalist.length - 1].substring(0,4);
+        console.log(legalist)
+        $('.chessblock').on('mousedown', () => {
+             var piece_id = event.target.id;
+            $('.chessblock').each(function() {
+                if (legalist.includes(piece_id.substring(0,2) + $(this).attr("id").substring(2))){
+                    $(this).css("backgroundColor","#008000")
+                    $(this).droppable({
+                        disabled: false,
+                        drop: function(event, ui){
+                            var data = piece_id.substring(0,2) + event.target.id.substring(2);
+                            $.ajax({
+                                url: '/shiss2',
+                                type: 'POST',
+                                data: data,
+                                success: function(response){
+                                    $(".chess").load("{{url_for('shiss2') }}");
+                                    console.log(response);
+                                },
+                                error: function(error){
+                                    console.log(error);
+                                }
+                            })
+                        }
+                    })
+                }
+                else{
+                    $(this).droppable({
+                        disabled: true
+                    });
+                }
+            })
+        })
+        $(document).on('mouseup', () => {
+            $('.chessblock').each(function() {
+                $(this).css("backgroundColor","#ffffff")
+            })
+        })
+
+        $('.chessblock').draggable({
+            revert: true
+        })
+    })
+</script>

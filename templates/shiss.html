@@ -10,7 +10,7 @@
     <div class = 'page_topper'></div>
  {% for player in players %}
     {% if player.color == 'black' %}
-    <p>{{player.time}}</p>
+    <p>   {{player.time}}</p>
         {% for item in player.vict_list %}
             <img src = "/static/{{item.color}}/{{item.type}}.png" alt= "_" width="25" height="25">
         {% endfor %}
@@ -25,7 +25,7 @@
     {% endfor %}></div>
  {% for player in players %}
     {% if player.color == 'white' %}
-        <p>{{player.time}}</p>
+        <p>   {{player.time}}</p>
         {% for item in player.vict_list %}
             <img src = "/static/{{item.color}}/{{item.type}}.png" alt= "_" width="25" height="25">
         {% endfor %}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Shiss</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/shiss.css') }}">
+
+</head>
+
+<body>
+    <div class = 'page_topper'></div>
+    <div class='chess'></div>
+    <div class = 'page_topper'></div>
+    
+    <script type=text/javascript src="{{url_for('static', filename='js/jquery.js') }}"></script>
+    <script type=text/javascript src="{{url_for('static', filename='js/jquery-ui.js') }}"></script>
+    <script>
+        $(document).ready(() => {
+            $(".chess").load("{{url_for('shiss2') }}");
+        })
+    </script>
+    
+
+</body>
+
+<footer></footer>
+
+</html>

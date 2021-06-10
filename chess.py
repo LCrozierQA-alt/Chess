@@ -195,7 +195,7 @@ def initiate_session() :
     return players
 
 
-def chess(players, form) :
+def chesspy(players, form) :
     print(form)
     players[0].time -= (datetime.datetime.now() - players[0].delta)
     [move for move in players[0].legal_moves if form == str(move)][0].piece.move_piece(form,players[1])
