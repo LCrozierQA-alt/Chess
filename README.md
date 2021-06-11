@@ -1,2 +1,2 @@
-# DumbFlask
+# Chess
 Chess game
